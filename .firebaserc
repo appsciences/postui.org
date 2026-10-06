@@ -1,0 +1,12 @@
+{
+  "projects": {
+    "default": "postui-org"
+  },
+  "targets": {
+    "postui-org": {
+      "hosting": {
+        "site": ["postui-org"]
+      }
+    }
+  }
+}

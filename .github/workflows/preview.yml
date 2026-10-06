@@ -1,0 +1,43 @@
+name: Preview on pull request
+
+on:
+  pull_request:
+    branches:
+      - main
+
+# One preview deploy per PR; a new push replaces an in-flight one.
+concurrency:
+  group: firebase-hosting-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Site checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run pre-deploy site checks
+        run: node scripts/check-site.mjs
+
+  preview:
+    name: Deploy preview channel
+    needs: check
+    # Secrets are not available to pull requests from forks, so the deploy step
+    # would fail there. Checks above still run on every PR.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to a preview channel
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_POSTUI_ORG }}
+          projectId: postui-org
+          expires: 7d

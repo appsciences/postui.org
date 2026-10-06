@@ -1,0 +1,30 @@
+# Firebase
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
+ui-debug.log
+database-debug.log
+firestore-debug.log
+pubsub-debug.log
+
+# Service account keys — never commit these
+*service-account*.json
+*serviceaccount*.json
+*-key.json
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log
+
+# macOS
+.DS_Store
+
+# Editors
+.vscode/
+.idea/
+
+# Env
+.env
+.env.*
+!.env.example

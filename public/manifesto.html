@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>manifesto — postui</title>
+<meta name="description" content="Ten theses on moving software from application-centric interfaces to assistant-centric ones — and the four things we are not claiming." />
+<meta property="og:title" content="The postui manifesto — AI is the new UI" />
+<meta property="og:description" content="The app was never the product. Ten theses on assistant-native software, and four things we are not claiming." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://postui.org/manifesto" />
+<link rel="canonical" href="https://postui.org/manifesto" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230a0a0a'/%3E%3Ctext x='8' y='45' font-family='monospace' font-size='40' fill='%238d8ad4'%3E%26gt;%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0a0a0a; --bg-2:#0f0f0f; --bg-3:#161616; --bg-4:#060606;
+    --fg:#d8d8d2; --fg-bright:#ececea; --fg-dim:#9a9a92; --fg-dimmer:#5a5a55;
+    --accent:#8d8ad4; --accent-bright:#a6a3e6; --accent-bg:#2c2b58; --accent-bg-soft:#1c1b3a;
+    --border:#1f1f1d; --border-bright:#2c2c2a; --dash:#3a3a35;
+    --ok:#8fbf8c; --warn:#d0b070; --err:#c97a7a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  html,body{
+    background:var(--bg);color:var(--fg);
+    font-family:'Fira Code',ui-monospace,Menlo,Consolas,monospace;
+    font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;
+    font-variant-ligatures:contextual;
+  }
+  body{
+    min-height:100vh;padding:30px 16px 120px;
+    display:flex;justify-content:center;align-items:flex-start;
+    background-image:radial-gradient(ellipse 1200px 700px at 50% -4%,rgba(141,138,212,0.06),transparent 70%);
+  }
+  a{color:var(--accent);text-decoration:none;}
+  a:hover{color:var(--accent-bright);}
+  ::selection{background:var(--accent-bg);color:var(--fg-bright);}
+
+  .body{width:100%;max-width:1040px;padding:30px 16px 18px;}
+  @media(max-width:560px){.body{padding:22px 14px 14px;}}
+
+  .mark{display:block;width:max-content;margin-bottom:26px;font-size:17px;color:var(--fg-bright);letter-spacing:-0.02em;}
+  .mark .p{color:var(--accent);margin-right:6px;}
+  .mark .tld{color:var(--fg-dimmer);}
+  .crumb{color:var(--fg-dimmer);font-size:12px;margin-bottom:34px;}
+  .crumb .p{color:var(--accent);}
+
+  .title{font-size:clamp(24px,4vw,36px);line-height:1.22;color:var(--accent-bright);font-weight:500;letter-spacing:-0.01em;}
+  .title .b{color:var(--fg-bright);}
+  .standfirst{margin-top:20px;color:var(--fg-dim);font-size:14px;max-width:68ch;text-wrap:pretty;}
+  .standfirst b{color:var(--fg-bright);font-weight:400;}
+
+  .rule{border-top:1px dashed var(--dash);margin:44px 0 0;}
+
+  .sect{border-top:1px dashed var(--dash);padding:44px 0 8px 20px;margin-top:44px;}
+  .sect .sh{color:var(--fg-bright);font-size:15px;}
+  .sect .sh .p{color:var(--accent);}
+  .sect .sn{color:var(--fg-dimmer);font-size:12px;margin-top:6px;max-width:64ch;}
+  @media(max-width:720px){.sect{padding-left:16px;}}
+
+  .doc{padding-left:20px;}
+  @media(max-width:720px){.doc{padding-left:16px;}}
+
+  .th{margin-top:34px;max-width:70ch;}
+  .th .n{color:var(--accent);font-size:12px;letter-spacing:.06em;}
+  .th h2{
+    font-size:17px;color:var(--fg-bright);font-weight:500;letter-spacing:-0.01em;
+    margin-top:8px;line-height:1.35;text-wrap:balance;
+  }
+  .th p{color:var(--fg-dim);font-size:13.5px;margin-top:11px;text-wrap:pretty;}
+  .th p b{color:var(--fg);font-weight:400;}
+  .th p em{color:var(--accent-bright);font-style:normal;}
+
+  .not{
+    border:1px dashed var(--dash);border-radius:6px;background:var(--bg-4);
+    padding:24px 24px 26px;margin-top:8px;position:relative;max-width:78ch;
+  }
+  .not .stripes{position:absolute;inset:0;opacity:.5;pointer-events:none;
+    background-image:repeating-linear-gradient(135deg,rgba(141,138,212,0.05) 0 11px,transparent 11px 22px);}
+  .not .ni{position:relative;z-index:1;}
+  .not .ni + .ni{margin-top:20px;padding-top:20px;border-top:1px dashed var(--border-bright);}
+  .not .nh{color:var(--fg-bright);font-size:14px;}
+  .not .nh .x{color:var(--err);margin-right:8px;}
+  .not .nb{color:var(--fg-dim);font-size:13px;margin-top:8px;max-width:64ch;text-wrap:pretty;}
+
+  .act{margin-top:26px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-left:20px;}
+  @media(max-width:720px){.act{padding-left:16px;}}
+  .open{
+    display:inline-flex;align-items:center;gap:9px;padding:11px 18px;border-radius:3px;
+    border:1px solid var(--accent);color:var(--accent-bright);background:rgba(141,138,212,0.07);
+    font-family:inherit;font-size:13px;cursor:pointer;transition:background .14s,color .14s;
+  }
+  .open:hover{background:var(--accent);color:#0a0a0a;}
+  .open .ar{transition:transform .14s;}
+  .open:hover .ar{transform:translateX(3px);}
+  .open.ghost{border-color:var(--border-bright);color:var(--fg-dim);background:transparent;}
+  .open.ghost:hover{border-color:var(--accent);color:var(--accent-bright);background:rgba(141,138,212,0.07);}
+  .urlhint{color:var(--fg-dimmer);font-size:11.5px;}
+  .urlhint b{color:var(--fg-dim);font-weight:400;}
+
+  .foot{
+    border-top:1px dashed var(--dash);margin-top:56px;padding:20px 0 4px;
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;color:var(--fg-dimmer);font-size:12px;
+  }
+  .foot .gt{color:var(--accent);}
+  .foot .spacer{flex:1;}
+</style>
+</head>
+<body>
+
+<div class="body">
+
+  <a class="mark" href="/" aria-label="postui"><span class="p">&gt;</span>postui<span class="tld">.org</span></a>
+  <div class="crumb"><span class="p">&gt;</span> cat ~/postui/manifesto.md</div>
+
+  <h1 class="title">The app was <span class="b">never the product</span>.</h1>
+  <div class="standfirst">
+    Ten theses on moving software from application-centric interfaces to assistant-centric ones —
+    and, because a manifesto with no limits is just advertising, <b>the four things we are not claiming</b>.
+  </div>
+
+  <div class="rule"></div>
+
+  <div class="doc">
+
+    <div class="th">
+      <div class="n">01</div>
+      <h2>The screens were scaffolding for a database.</h2>
+      <p>
+        Every app you have ever shipped is a way to reach some records and some rules about those
+        records. The buttons, tabs, wizards and settings panes existed because typing at a database
+        was not something we could hand to a person. <b>That constraint is what we built an entire
+        industry on, and it no longer holds.</b>
+      </p>
+    </div>
+
+    <div class="th">
+      <div class="n">02</div>
+      <h2>Most software is CRUD plus business rules.</h2>
+      <p>
+        Not all. Most. Take an honest inventory of the enterprise tools and consumer utilities you
+        use in a week and count how many are meaningfully more than create, read, update, delete,
+        wrapped in policy. <em>The interesting question is not whether the rest can be conversational —
+        it is what the exceptions have in common.</em>
+      </p>
+    </div>
+
+    <div class="th">
+      <div class="n">03</div>
+      <h2>Navigation is a tax the user pays on our schema.</h2>
+      <p>
+        Nobody wants to open the app, find the tab, apply the filter and scroll. They want the answer
+        or the effect. Every screen between intent and outcome is overhead we invented, charged to
+        them, and then called a user experience.
+      </p>
+    </div>
+
+    <div class="th">
+      <div class="n">04</div>
+      <h2>The interface is collapsing into intent.</h2>
+      <p>
+        A seven-screen workflow becomes one sentence and a tool call. This is not a new skin on the
+        old thing — it inverts the model. The user no longer navigates a structure we designed;
+        they state a goal and <b>the structure is assembled for them, once, and thrown away.</b>
+      </p>
+    </div>
+
+    <div class="th">
+      <div class="n">05</div>
+      <h2>Some things genuinely need pixels.</h2>
+      <p>
+        Comparison across many items. Spatial and geographic data. Ambient state you glance at rather
+        than ask for. Direct manipulation of something creative. Anything with real bandwidth, where a
+        sentence is a worse container than a picture. <em>The discipline is knowing which is which —
+        and being willing to say "this one stays a GUI".</em>
+      </p>
+    </div>
+
+    <div class="th">
+      <div class="n">06</div>
+      <h2>The unit of software is becoming the tool, not the app.</h2>
+      <p>
+        What you ship is a set of capabilities an assistant can invoke, with a contract, permissions
+        and a description good enough for a model to choose it correctly. <b>The description is now
+        part of the API surface.</b> Nobody has good taste about this yet — that is precisely why it
+        is worth working on in public.
+      </p>
+    </div>
+
+    <div class="th">
+      <div class="n">07</div>
+      <h2>Persistent state is what makes an assistant beat an app.</h2>
+      <p>
+        A stateless chat is a worse app. An assistant that remembers your preferences, your history
+        and your constraints does not need the settings screen, the onboarding flow or the saved-search
+        feature — three surfaces deleted by one capability. Conversion work that ignores state produces
+        a chatbot and disappoints everyone.
+      </p>
+    </div>
+
+    <div class="th">
+      <div class="n">08</div>
+      <h2>Distribution moves to whoever holds the assistant.</h2>
+      <p>
+        When the operating system can route a request to a model, the OS becomes a router and the app
+        store becomes a directory of tools. <b>That is an existential question for anyone whose
+        business is owning the software layer above the hardware</b> — and an opening for everyone
+        who was locked out of it.
+      </p>
+    </div>
+
+    <div class="th">
+      <div class="n">09</div>
+      <h2>The implementations are transient. The thesis is not.</h2>
+      <p>
+        Custom GPTs, plugins, skills, MCP servers, App Intents, extensions — these are this year's
+        nouns, and half of them will be renamed or gone. We do not build an identity on a vendor's
+        vocabulary. <em>They are implementations of the transition, not the transition.</em>
+      </p>
+    </div>
+
+    <div class="th">
+      <div class="n">10</div>
+      <h2>This is an engineering discipline, not a prediction.</h2>
+      <p>
+        Predictions are cheap and everyone has one. What is missing is the boring middle: a repeatable
+        way to take a real product apart, name its intents, tools, state and resources, decide honestly
+        what stays visual, build the thing, and write down what broke. <b>That is the work. It is done
+        one teardown at a time, in public, by people willing to be wrong on the record.</b>
+      </p>
+    </div>
+
+  </div>
+
+  <!-- ───── not claiming ───── -->
+  <div class="sect">
+    <div class="sh"><span class="p">&gt;</span> cat NOT-CLAIMING.md</div>
+    <div class="sn">the limits of the argument, stated up front so nobody has to guess</div>
+  </div>
+  <div class="doc">
+    <div class="not">
+      <div class="stripes"></div>
+
+      <div class="ni">
+        <div class="nh"><span class="x">✗</span>That chat is the endpoint.</div>
+        <div class="nb">
+          A text box is the current shell, not the destination. Voice, widgets, ambient agents,
+          generated one-off interfaces and things nobody has built yet all sit under the same thesis.
+          The claim is about intent replacing navigation — not about everyone typing all day.
+        </div>
+      </div>
+
+      <div class="ni">
+        <div class="nh"><span class="x">✗</span>That the GUI is dead.</div>
+        <div class="nb">
+          Bad GUIs are dead: forms that exist because of a schema, wizards, nav trees, settings panes
+          nobody wanted. Good visual interfaces are doing something a sentence cannot, and they will
+          outlive all of us. Half of this work is defending them.
+        </div>
+      </div>
+
+      <div class="ni">
+        <div class="nh"><span class="x">✗</span>That this is cheaper or easier.</div>
+        <div class="nb">
+          You trade deterministic control flow for a probabilistic one. Evals, latency, permissioning,
+          auditability, cost per action, and what happens when the model picks the wrong tool — these
+          are real, mostly unsolved, and the reason pilots matter more than opinions.
+        </div>
+      </div>
+
+      <div class="ni">
+        <div class="nh"><span class="x">✗</span>That every app should be converted.</div>
+        <div class="nb">
+          Some products <b>are</b> the visualization. Some workflows are safer with a button and a
+          confirmation. A teardown that finds nothing worth converting is a good teardown, and we
+          publish those too.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ───── the work ───── -->
+  <div class="sect">
+    <div class="sh"><span class="p">&gt;</span> ./join</div>
+    <div class="sn">the argument is only worth as much as the teardowns under it</div>
+  </div>
+  <div class="act">
+    <a class="open dl" href="https://postui.discourse.group"><span>open the forum</span><span class="ar">→</span></a>
+    <a class="open ghost" href="/"><span>back to postui.org</span></a>
+    <span class="urlhint">public to read · <b>post the app you would convert</b></span>
+  </div>
+
+  <div class="foot">
+    <span class="gt">&gt;</span>
+    <span>postui.org — an nbino initiative</span>
+    <span class="spacer"></span>
+    <span>say hi: <a href="mailto:hi@postui.org">hi@postui.org</a></span>
+  </div>
+
+</div>
+
+<script>
+/* Change this one line when the forum moves to a custom domain. */
+const DISCOURSE = 'https://postui.discourse.group';
+document.querySelectorAll('a.dl').forEach(a=>{
+  a.href = a.getAttribute('href').replace(/^https:\/\/postui\.discourse\.group/, DISCOURSE);
+  a.target = '_blank'; a.rel = 'noopener';
+});
+</script>
+</body>
+</html>
