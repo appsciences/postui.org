@@ -5,7 +5,8 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**",
-      "README.md"
+      "README.md",
+      "functions/**"
     ],
     "cleanUrls": true,
     "trailingSlash": false,
@@ -28,6 +29,19 @@
           }
         ]
       }
+    ],
+    "rewrites": [
+      {
+        "source": "/api/sponsor",
+        "function": {
+          "functionId": "sponsor",
+          "region": "us-central1"
+        }
+      }
     ]
+  },
+  "functions": {
+    "source": "functions",
+    "runtime": "nodejs22"
   }
 }
