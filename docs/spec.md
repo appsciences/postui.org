@@ -170,7 +170,7 @@ Two platform facts force this. Outside viewers never write to an artifact's buil
 Members, their assistants and the AI Host reach Postgres only through the connector; Claude Code and Supabase MCP touch it at build time.
 
 - **PostUI artifact.** Single-file HTML that declares `mcp` (PostUI tools only), `sample` and `downloads`. It is shared by email invitation, since `mcp` bars the public link. It renders the feed, threads, Builds, Pilots and Canon, runs the AI helpers, and shows a first-run panel that explains how to add the connector.
-- **PostUI connector.** OAuth 2.1 sign-in through Supabase Auth. Tools: `whoami`, `feed`, `search`, `get_thread`, `post_need`, `post_build`, `post_pilot`, `reply`, `react`, `try_report` and `report`, plus `mod_*` for moderators and `ai_*` for the AI Host.
+- **PostUI connector.** OAuth 2.1 sign-in through Supabase Auth. Tools: `whoami`, `feed`, `search`, `get_thread`, `post_need`, `post_build`, `post_pilot`, `reply`, `react`, `try_report` and `report`; the artifact also reads through `get_member`, `members`, `canon`, `inbox` and `mark_read`; moderators get `mod_queue` and `mod_action`, and the AI Host gets `ai_*`. The artifact's demo backend (`createMockBackend` in `artifact/postui.html`) defines the input and payload shapes the connector must return.
 - **Supabase.** Postgres with row-level security as the system of record, plus Auth, Edge Functions and pg_cron.
 - **AI Host.** Scheduled Claude tasks that call the connector's `ai_*` tools; the prompts are versioned in the repo.
 - **postui.org.** The existing static site: landing page, join-request form and Canon pages exported by the AI Host. It is the only part search engines see.
@@ -287,6 +287,16 @@ Risks:
 - **Cost.** AI helpers spend each member's Claude usage and the AI Host spends the Host's; batch calls and skip empty runs.
 - **Abuse.** Member-submitted code and AI reading member text are the two sharp edges; see Moderation and trust.
 - **Founder time.** The 10-hour budget holds only if the AI Host jobs work, so measure it weekly.
+
+## Artifact status
+
+Artifact v1 (step 6) shipped ahead of steps 2–5 as a UI on demo data (issue #2). It lives in `artifact/postui.html`, its changelog is in `artifact/CHANGELOG.md`, and `tests/artifact.test.mjs` covers it.
+
+- **Data.** Every read and write goes through methods named after the connector's tools. On load, the page asks the runtime for `mcp` and looks for a connector named `PostUI`. If it can't reach one, it uses in-memory demo fixtures, shows the first-run panel and a "demo data" badge, and gives a "view as" switch so the moderator and Host views can be tried.
+- **Capabilities.** It's published with `sample` and `downloads` and pinned to runtime contract 0.2.72. `mcp` can't be declared until the connector exists, so the next publish after step 5 adds `mcp: {servers: [{server: "PostUI", tools: [...]}]}` and runs the guest functional pass.
+- **AI helpers.** Need coach, thread summary and Ask PostUI run on the viewer's Claude on a click, and are hidden when `sample` is unavailable or declined. Spec drafter, Build reviewer and Starter generator stay in step 7; the Build review card shows stored reviews only.
+- **Previews.** `PREVIEW_ENABLED` is false until spike S4 passes. Builds show the code view, scan flags and "Rebuild with my Claude".
+- **Safety.** Markdown is parsed to a node tree and built with DOM nodes, links are limited to `http(s)` and `#t-`/`#u-` anchors, and the tests forbid HTML-string sinks, network calls and embedded secrets.
 
 ## Build brief for Claude Code
 

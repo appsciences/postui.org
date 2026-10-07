@@ -62,6 +62,10 @@ dependency-free and asserts:
 
 Run locally with `node scripts/check-site.mjs`.
 
+Both workflows also run `node --test`, the tests for the community artifact in
+`artifact/` (see [docs/spec.md](docs/spec.md)). The artifact isn't part of the hosted
+site; `firebase.json` publishes only `public/`.
+
 ## Adding a page
 
 1. Add `public/<name>.html` with a `<title>` and a `rel=canonical` of `https://postui.org/<name>`.
