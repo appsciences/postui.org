@@ -23,6 +23,8 @@ jobs:
           node-version: 22
       - name: Run pre-deploy site checks
         run: node scripts/check-site.mjs
+      - name: Run artifact tests
+        run: node --test
 
   deploy:
     name: Deploy to live channel
