@@ -21,7 +21,7 @@ form per page.
 ## Hosting
 
 - **Provider:** Firebase Hosting
-- **Firebase project:** `postui-org`
+- **Firebase project:** `postui-org` (display name `postui-org`; Google Cloud doesn't allow dots in either), owned by leopelekh@gmail.com
 - **Hosting site:** `postui-org` → default domains `postui-org.web.app`, `postui-org.firebaseapp.com`
 - **Custom domain:** `postui.org` (apex, primary) and `www.postui.org` (redirects to apex)
 - **Registrar / DNS:** Namecheap — DNS is managed at the registrar, records point at Firebase
@@ -35,8 +35,8 @@ Deploys are automated; nothing is deployed from a laptop.
 
 | Trigger                   | Workflow                        | Result                                          |
 | ------------------------- | ------------------------------- | ----------------------------------------------- |
-| Push / merge to `main`    | `.github/workflows/deploy.yml`  | Checks run, then deploy to the **live** channel  |
-| Pull request into `main`  | `.github/workflows/preview.yml` | Checks run, then a **preview channel** (7d TTL) whose URL is commented on the PR |
+| Push / merge to `main` or `master` | `.github/workflows/deploy.yml`  | Checks run, then deploy to the **live** channel  |
+| Pull request into `main` or `master` | `.github/workflows/preview.yml` | Checks run, then a **preview channel** (7d TTL) whose URL is commented on the PR |
 
 Both workflows authenticate with a Google service account stored as the repository
 secret `FIREBASE_SERVICE_ACCOUNT_POSTUI_ORG`. The service account is scoped to Firebase

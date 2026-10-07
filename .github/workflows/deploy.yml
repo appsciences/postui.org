@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - master
   workflow_dispatch:
 
 # Never let two live deploys race; a newer commit supersedes an in-flight one,

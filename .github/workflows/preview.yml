@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+      - master
 
 # One preview deploy per PR; a new push replaces an in-flight one.
 concurrency:
