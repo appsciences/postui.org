@@ -33,6 +33,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+      checks: write   # the action posts its result as a check run
     steps:
       - uses: actions/checkout@v4
       - name: Deploy to a preview channel
