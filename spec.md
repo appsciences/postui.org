@@ -26,6 +26,19 @@ form per page.
 - **Custom domain:** `postui.org` (apex, primary) and `www.postui.org` (redirects to apex)
 - **Registrar / DNS:** Namecheap — DNS is managed at the registrar, records point at Firebase
 
+DNS records at Namecheap (Advanced DNS), as Firebase Hosting requires them:
+
+| Type  | Host  | Value                                              | Purpose                          |
+| ----- | ----- | -------------------------------------------------- | -------------------------------- |
+| A     | `@`   | `199.36.158.100`                                   | Apex served by Firebase Hosting  |
+| TXT   | `@`   | `hosting-site=postui-org`                          | Proves the domain to Firebase    |
+| CNAME | `www` | `postui-org.web.app.`                              | `www` → Firebase, redirects to apex |
+| TXT   | `@`   | `v=spf1 include:spf.efwd.registrar-servers.com ~all` | Namecheap email forwarding (kept) |
+
+Both custom domains were added through the Hosting API (`customDomains`), since the
+Firebase CLI has no command for it; `www.postui.org` has `redirectTarget: postui.org`.
+Firebase issues the TLS certificates itself once the records resolve.
+
 HTML and the site root are served with `Cache-Control: no-cache, max-age=0` so content
 edits go live immediately rather than sitting in an intermediate cache.
 
@@ -39,7 +52,8 @@ Deploys are automated; nothing is deployed from a laptop.
 | Pull request into `main` or `master` | `.github/workflows/preview.yml` | Checks run, then a **preview channel** (7d TTL) whose URL is commented on the PR |
 
 Both workflows authenticate with a Google service account stored as the repository
-secret `FIREBASE_SERVICE_ACCOUNT_POSTUI_ORG`. The service account is scoped to Firebase
+secret `FIREBASE_SERVICE_ACCOUNT_POSTUI_ORG` (`github-deploy@postui-org.iam.gserviceaccount.com`,
+role `roles/firebasehosting.admin` only). The service account is scoped to Firebase
 Hosting on the `postui-org` project only.
 
 Live deploys are serialised (`concurrency: firebase-hosting-live`, `cancel-in-progress: false`)
